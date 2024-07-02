@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API;
 
-[ApiController]
-[Route("api/[controller]")]
 public class UsersController(DataContext context) : BaseApiController
 {
     [HttpGet]
