@@ -26,7 +26,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         };
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        
+
         return new UserDto{
             Username = user.UserName,
             Token = tokenService.CreateToken(user)
@@ -34,7 +34,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == loginDto.Username.ToLower());
 
@@ -48,7 +48,10 @@ public class AccountController(DataContext context, ITokenService tokenService) 
         {
             if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
         }
-        return user;
+         return new UserDto{
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user)
+        };
     }
 
 
